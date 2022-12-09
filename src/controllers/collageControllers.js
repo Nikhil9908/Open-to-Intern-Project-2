@@ -10,10 +10,10 @@ const { isValidRequestBody, isValidName, } = require("../validator/validator")
       // ----------------collage name and fullName validation-----------------------
       if (!isValidRequestBody(reqBody)) return res.status(400).send({ status: false, message: "College data is required" })  
       
-      if (!name) return res.status(400).send({ status: false, message: "name is required" })
-      if (!isValidName(name.toLowerCase().trim())) return res.status(400).send({ status: false, message: "name is invalide" })
+      if (!name) return res.status(400).send({ status: false, message: "College name is required" })
+      if (!isValidName(name.toLowerCase().trim())) return res.status(400).send({ status: false, message: "College name is invalid" })
 
-      const clgName=await collegeModel.findOne({name})
+      const clgName= await collegeModel.findOne({name})
       if(clgName) return res.status(400).send({statuts:false,message:"college name already exist"})
 
       if (!fullName) return res.status(400).send({ status: false, message: "fullName is required" })
@@ -32,9 +32,10 @@ const { isValidRequestBody, isValidName, } = require("../validator/validator")
 
 //get-api =>fetch college and interns data 
   const getcollegeDetails = async function(req,res){
+    res.setHeader('Access-Control-Allow-Origin','*')
       try{
-      const name=req.query.name
-      if(!name) return res.status(400).send({statuts:false,message:"name is required"})
+      const name=req.query.collegeName
+      if(!name) return res.status(400).send({statuts:false,message:"College name is required"})
       const collageData=await collegeModel.findOne({name})
       if(!collageData) return res.status(404).send({statuts:false,message:"please provide valid college name"})
 
@@ -54,3 +55,5 @@ const { isValidRequestBody, isValidName, } = require("../validator/validator")
 }
 
 module.exports = { createCollege ,getcollegeDetails}
+
+
